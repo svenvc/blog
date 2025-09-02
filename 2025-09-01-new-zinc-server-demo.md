@@ -2,12 +2,12 @@
 
 September 1, 2025.
 
-Since the summer of 2011, with the release of Pharo Smalltalk version 1.3, 
-Zinc HTTP Components has been an essential and critical part of the image. 
-It has been in development ever since.
+Since the summer of 2011, with the release of [Pharo Smalltalk](https://www.pharo.org) version 1.3, 
+[Zinc HTTP Components](https://github.com/svenvc/zinc) has been an essential and critical part of the image. 
+It has been in development ever since, evolving along with the rest of Pharo.
 
 Part of Zinc is a standard HTTP/1.1 server. 
-You can run it with one line of code. 
+You can run it locally with one line of code. 
 Out of the box, its default delegate offers some demos and support for testing.
 
 In the spirit of eating your own dogfood, a live cloud demo was set up, publicly hosting the same setup.
