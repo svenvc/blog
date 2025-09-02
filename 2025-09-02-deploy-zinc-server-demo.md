@@ -79,7 +79,7 @@ multiple Pharo instances, but that is another, interesting story.
 The third step is to extend the nginx configuration.
 Here is the file for the zn.stfx.eu demo server:
 
-```
+```nginx
 server {
   server_name zn.stfx.eu;
 
@@ -124,7 +124,7 @@ mostly for cosmetic reasons.
 
 These make little functional difference except for 2 of them:
 
-```
+```nginx
 proxy_set_header Connection "";
 proxy_http_version 1.1;
 ```
@@ -137,7 +137,7 @@ but let's assume that nginx is battle tested in this respect.
 The result of all this is that a standard tool like curl shows us that all is OK
 with respect to security and HTTP/2, as can be seen from this interaction:
 
-```
+```sh
 $ curl -v https://zn.stfx.eu/small                   
 
 * Host zn.stfx.eu:443 was resolved.
