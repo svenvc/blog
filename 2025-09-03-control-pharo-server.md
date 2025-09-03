@@ -3,12 +3,12 @@
 September 3, 2025
 
 Continuing from the posts of the last two days, I want to describe 
-how I control the Pharo server process on my Linux server.
+how I control the Pharo server process on my Linux machine.
 Most Linux versions use a framework called [systemd](https://systemd.io)
 (see also [systemd's Wikipedia entry](https://en.wikipedia.org/wiki/Systemd)) 
 to setup, manage and control so called daemons or server processes.
 We want to integrate with systemd to be a nice Linux server citizen.
-This will help sysadmin recognize us as a something they understand.
+This will help sysadmins recognize us as a something they understand.
 
 You need two things:
 - a service specification
@@ -36,7 +36,8 @@ WantedBy=default.target
 
 Although there exist many features and options, the basic idea should be clear.
 We refer to a working directory where a script called `pharo-ctl.sh` lives
-that can start and stop our Pharo server, leaving a PID file behind when started.
+that can start and stop our Pharo server, leaving a PID file behind when started
+(a file containing the OS's process identifier of Pharo).
 
 The `pharo-ctl.sh` script is a variant of 
 [pharo-ctl.sh](https://github.com/svenvc/pharo-server-tools/blob/master/pharo-ctl.sh)
