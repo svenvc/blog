@@ -36,9 +36,9 @@ WantedBy=default.target
 
 Although there exist many features and options, the basic idea should be clear.
 We refer to a working directory where a script called `pharo-ctl.sh` lives
-that can start and stop our Pharo server, leaving a PID file behind started.
+that can start and stop our Pharo server, leaving a PID file behind when started.
 
-The `pharo-ctl.sh` is a variant of 
+The `pharo-ctl.sh` script is a variant of 
 [pharo-ctl.sh](https://github.com/svenvc/pharo-server-tools/blob/master/pharo-ctl.sh)
 in my (old) [pharo-server-tools](https://github.com/svenvc/pharo-server-tools) project.
 
@@ -87,7 +87,7 @@ Sep 02 15:42:04 audio359 pharo-ctl.sh[820303]: /home/stfx/pharo13/pharo-vm/pharo
 Sep 02 15:42:04 audio359 systemd[1]: Started zinc-http-server-nxt.service - Zinc HTTP Components Server NXT.
 ```
 
+The top section details the current state, while the bottom section shows the tail of the log output.
+
 Systemd will make sure our service is started automatically when the system boots,
 and keeps running, restarting it when needed.
-
-
