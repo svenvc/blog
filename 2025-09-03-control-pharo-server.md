@@ -16,7 +16,7 @@ You need two things:
 
 Here is the contents of `zinc-http-server-nxt.service`, our service specification:
 
-```sh
+```console
 [Unit]
 Description=Zinc HTTP Components Server NXT
 After=network.target
@@ -43,7 +43,7 @@ The `pharo-ctl.sh` script is a variant of
 in my (old) [pharo-server-tools](https://github.com/svenvc/pharo-server-tools) project.
 
 Invoked without arguments, the script explains how to use it:
-```
+```console
 $ ./pharo-ctl.sh 
 Executing ./pharo-ctl.sh
 Working directory /home/stfx/pharo13
@@ -66,7 +66,7 @@ The script being the one I showed yesterday, the image the one we build with our
 
 In practice, you use a tool called `systemctl` to manage your service, once installed.
 Here is the output from the `status` subcommand:
-```sh
+```console
 $ sudo systemctl status zinc-http-server-nxt
 ● zinc-http-server-nxt.service - Zinc HTTP Components Server NXT
      Loaded: loaded (/etc/systemd/system/zinc-http-server-nxt.service; enabled; preset: enabled)
@@ -91,3 +91,7 @@ The top section details the current state, while the bottom section shows the ta
 
 Systemd will make sure our service is started automatically when the system boots,
 and keeps running, restarting it when needed.
+
+Note that this is a generic solution for any Pharo Smalltalk server/service process,
+it just happens to be running a Zinc HTTP Components's server demo,
+but it could really be anything at all.

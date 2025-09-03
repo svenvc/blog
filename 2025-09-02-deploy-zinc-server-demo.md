@@ -51,7 +51,7 @@ This means we can go peek inside the running image, all without a graphical UI, 
 
 By asking the server to logToTranscript with a certain logLevel we get pretty standard output like so:
 
-```
+```console
 2025-09-02 16:23:27 109 078757 GET / 200 1437B 14ms
 2025-09-02 16:23:28 110 188471 GET /zn/small.html 200 113B 0ms
 2025-09-02 16:23:29 111 125899 GET /zn/small.html 200 113B 0ms
@@ -137,7 +137,7 @@ but let's assume that nginx is battle tested in this respect.
 The result of all this is that a standard tool like curl shows us that all is OK
 with respect to security and HTTP/2, as can be seen from this interaction:
 
-```sh
+```console
 $ curl -v https://zn.stfx.eu/small                   
 
 * Host zn.stfx.eu:443 was resolved.
