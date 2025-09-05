@@ -148,7 +148,7 @@ The following URLs can be used for a similar test on a larger document (about 8K
 
 Now, let’s change the **network** being used. Up until now, the numbers shown were from my home office machine, over a wireless network, residential cable internet maxing out at 300 Mbps down, 30 Mbps up in Belgium to the server which happens to be located in the Netherlands.
 
-Here is a measurement from a cheap shared virtual private server in Germany.
+Here is a measurement from a cheap shared virtual private server (4 cores, 6Gb memory) in Germany.
 
 ```console
 $ ab -k -n 1024 -c 16 https://stfx.eu/small.html
