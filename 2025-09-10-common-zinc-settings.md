@@ -25,7 +25,7 @@ ZnOptions class>>#socketStreamTimeout
 	^ 30
 ```
 
-The access the current applicable value of an option, you use the special `ZnCurrentOptions` dynamic variable.
+To access the current applicable value of an option, you use the special `ZnCurrentOptions` dynamic variable.
 
 ```smalltalk
 ZnCurrentOptions at: #socketStreamTimeout
@@ -33,7 +33,7 @@ ZnCurrentOptions at: #socketStreamTimeout
 
 Be aware though that this might return a different value depending on where you evaluate this expression. The values of options could have been overwritten dynamically by code up the call chain. 
 
-Let’s first have a look at how you can change the global default. This is done by accessing the global default. This is a writeable clone of the readonly set of predefined options.
+Let’s first have a look at how you can change the global default. This is done by accessing the global default. This is a writeable clone of the static readonly set of predefined options with their default values.
 
 ```smalltalk
 ZnOptions globalDefault at: #socketStreamTimeout put: 10
@@ -52,7 +52,7 @@ ZnOptions globalDefault clone
 Since we have the following implementation:
 
 ```smalltalk
-ZnNetworkingUtils class>>socketStreamTimeout
+ZnNetworkingUtils class>>#socketStreamTimeout
 	"Return the timeout in seconds for network socket stream operations like connecting, reading and writing."
 
 	^ ZnCurrentOptions at: #socketStreamTimeout 
@@ -107,6 +107,14 @@ The maximum line length in bytes that can be read from a stream before ZnLineToo
 **maximumNumberOfDictionaryEntries** (default 256)
 
 The maximum number dictionary entries to accept. Used by ZnMultiValueDictionary and thus for reading headers, url query and application form url encoded entity fields.
+
+For each of the 4 options discussed there exist setter methods on `ZnClient` and `ZnServer`. Looking at the references/senders/implementers of an option symbol is a good way to learn more.
+
+For an overview of all options that are defined with their defaults, you can ask for a flat dictionary of all bindings.
+
+```smalltalk
+ZnOptions globalDefault allBindings
+```
 
 By now you should know what to do when the following fails with a `ZnEntityTooLarge` exception, taking into account that that file is 21 MB.
 
