@@ -10,7 +10,7 @@ In many cases, when we are stopped by a hard kill, nothing bad happens. The serv
 
 But in some cases, like when we implement some form of persistency ourselves, or when we want to give existing client connections some time to finish their in flight requests, or when we want to close the network services we are using, we need to take control of the stop sequence.
 
-Pharo and its VM do not provide any services to this, so we’ll have to do this ourselves. Norbert’s idea consists of 2 parts: using `ZnReadEvalPrintDelegate` to offer a way to activate a shutdown sequence inside the running image and adding a signal handler to our startup script to trap the necessary OS signals and invoke the REPL service to execute the actual code.
+Pharo and its VM do not provide any services to do this, so we’ll have to implement this ourselves. Norbert’s idea consists of 2 parts: using `ZnReadEvalPrintDelegate` to offer a way to activate a shutdown sequence inside the running image and adding a signal handler to our startup script to trap the necessary OS signals and invoke the REPL service to execute the actual code.
 
 In our Smalltalk startup script we add the following.
 
@@ -147,10 +147,11 @@ wait
 ```
 
 After defining a couple of helper functions, 3 things happen:
-- register our own code when signals arrive
-- start the Pharo server in the background
-- wait until the Pharo server stops
-The `shutdown_pharo` function uses the REPL handler to ask Pharo to stop.
+- register our own code when certain signals arrive
+- start the Pharo server in the background, noting its pid
+- wait until the Pharo server subprocess stops
+
+The `shutdown_pharo` function uses the REPL handler to politely ask Pharo to stop.
 
 We’ll need an alternative systemd service definition as well.
 
@@ -258,6 +259,6 @@ Starting ShutdownSequence...
 Completed ShutdownSequence successfully
 ```
 
-After 3 `/random` requests, the REPL server, which is on a higher, more verbose log level, receive a POST request invoking the ShutdownSequence code. You can see the forked ShutdownSequence code stopping the server. This completes the cooperative Pharo server shutdown.
+After 3 `/random` requests, the REPL server, which is on a higher, more verbose log level, receive a POST request invoking the ShutdownSequence code. You can see the forked ShutdownSequence code stopping the server. This then completes the cooperative Pharo server shutdown.
 
-If anything would go wrong, after a timeout of 5 seconds, systemd will again send SIGKILL, but to all processes, not just the main one (the mixed option).
+If anything would go wrong, after a timeout of 5 seconds, systemd will again send SIGKILL, but to all processes, not just the main one as asked by the mixed option.
