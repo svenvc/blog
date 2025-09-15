@@ -51,9 +51,9 @@ iex(6)> hmac = :crypto.mac(:hmac, :sha, secret_key, bytes)
 <<127, 67, 212, 219, 236, 88, 54, 168, 158, 177, 36, 112, 177, 244, 112, 88, 224, 169, 130, 215>>
 ```
   
-The special `::integer-size(64)` syntax specifies that we want to convert an integer to a specific size of binary. Elixir is built on top of Erlang, the `:crypto.mac` function is part of the Erlang standard library, which we can call directly.
+The special `::integer-size(64)` syntax specifies that we want to convert an integer to a specific size of binary. Elixir is built on top of Erlang, the `:crypto.mac` function is part of the Erlang standard library, and we can call it directly.
 
-Now we got a 20-byte hash, `hmac`, which will be reduced to a smaller number using a specific algorithm. The very last nibble (half byte) will be used an offset to make a 4 byte selection from the hash. In this 4 byte selection, the top bit is ignored, so only 31 bits are to be used, converted to an integer.
+Now we have a 20-byte hash, `hmac`, which will be reduced to a smaller number using a specific algorithm. The very last nibble (half byte) will be used as an offset to make a 4 byte selection from the hash. In this 4 byte selection, the top bit is ignored, so only 31 bits are to be used and converted to an integer.
 
 ```console
 iex(7)> <<_::binary-size(19), _::4, offset::4>> = hmac
@@ -62,7 +62,7 @@ iex(8)> offset
 7
 ```
 
-This is weird, right ? Elixir’s equal sign is actually not just an assignment operator, but a match operator. Here the left hand side should be read as a template that should match the right hand side. The template consists of a binary with 19 bytes that we are not interested in (hence the underscore), then 4 bits that we are not interested in, and finally the last nibble that we are interested in as `offset`.
+This is weird, right ? Elixir’s equal sign is actually not just an _assignment_ operator, but a _match_ operator as well. Here the left hand side should be read as a template that should match the right hand side. The template consists of a binary with 19 bytes that we are not interested in (hence the underscore), then 4 bits that we are not interested in, and finally the last nibble that we are interested in as `offset`.
 
 ```console
 iex(9)> <<_::binary-size(offset), _::1, selection::integer-size(31), _::binary>> = hmac
@@ -141,4 +141,11 @@ iex(1)> GoogleAuthenticator.generate_code("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ", un
 488676
 iex(2)> GoogleAuthenticator.generate_code("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
 30293
+```
+
+We need to add some padding to always end up with 6 digits.
+
+```console
+iex(3)> 30293 |> Integer.to_string() |> String.pad_leading(6, "0")
+"030293"
 ```
