@@ -74,9 +74,9 @@ iex(10)> selection
 We do something similar to apply the `offset` to make a sub selection as described earlier. Here the template is a binary with offset bytes that we not interested in, a bit we are not interested in, a 31-bit integer that becomes our `selection`, and finally an ignored tail of undetermined length.
 
 ```console
-iex(9)> digits = 6
+iex(11)> digits = 6
 6
-iex(10)> rem(selection, 10 ** digits)
+iex(12)> rem(selection, 10 ** digits)
 488676
 ```
 
@@ -143,7 +143,7 @@ iex(2)> GoogleAuthenticator.generate_code("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
 30293
 ```
 
-We need to add some padding to always end up with 6 digits.
+We also need to add some padding to always end up with 6 digits.
 
 ```console
 iex(3)> 30293 |> Integer.to_string() |> String.pad_leading(6, "0")
