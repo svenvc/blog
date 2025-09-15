@@ -2,7 +2,7 @@
 
 Sept 15, 2025
 
-Google Authenticator and many compatible alternatives implement time-based one time passwords (TOTP) with a specific set of parameters for two-factor authentication (2FA). How difficut would it be to perform the calculation behind Google Authenticator in Elixir ?
+Google Authenticator and many compatible alternatives implement time-based one time passwords (TOTP) with a specific set of parameters for two-factor authentication (2FA). How difficult would it be to perform the calculation behind Google Authenticator in Elixir ?
 
 A long time ago I wrote a similar article, [The code behind Google Authenticator](https://medium.com/concerning-pharo/the-code-behind-google-authenticator-9c59c606a572), which used Pharo Smalltalk as implementation language. It still is a good introduction so I won’t repeat the basics here.
 
