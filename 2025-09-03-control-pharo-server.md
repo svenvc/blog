@@ -1,6 +1,6 @@
 # Controlling a Pharo server process on Linux
 
-September 3, 2025
+Sept 3, 2025
 
 Continuing from the posts of the last two days, I want to describe 
 how I control the Pharo server process on my Linux machine.

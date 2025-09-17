@@ -1,6 +1,6 @@
-# Upgraded/updated Zinc HTTP Components’ server demo
+# Upgraded/updated Zinc HTTP Components' server demo
 
-September 1, 2025
+Sept 1, 2025
 
 Since the summer of 2011, with the release of [Pharo Smalltalk](https://www.pharo.org) version 1.3, 
 [Zinc HTTP Components](https://github.com/svenvc/zinc) has been an essential and critical part of the image. 

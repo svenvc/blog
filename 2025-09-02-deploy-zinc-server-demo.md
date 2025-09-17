@@ -1,8 +1,8 @@
 # Deploying the Zinc server demo
 
-September 2, 2025
+Sept 2, 2025
 
-The page at https://zn.stfx.eu has an extra paragraph with a summary
+The page at [https://zn.stfx.eu](https://zn.stfx.eu) has an extra paragraph with a summary
 of how the Zinc Components' server demo is set up.
 I want to explain some of the aspects that are involved.
 
