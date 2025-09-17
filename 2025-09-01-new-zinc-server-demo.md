@@ -16,7 +16,8 @@ However, both the demo and the way it was deployed haven’t changed much in man
 It was still using Pharo 7, released in 2019! 
 Hence I decided to give it some much need love.
 
-The new upgraded/updated Zinc server demo can be found at the same address as ever: https://zn.stfx.eu
+The new upgraded/updated Zinc server demo can be found at the same address as ever: 
+[https://zn.stfx.eu]https://zn.stfx.eu()
 
 ![the new zinc server demo welcome page](2025-09-01-new-zn.stfx.eu.png)
 
