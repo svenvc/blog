@@ -2,6 +2,9 @@
 
 Yet another blog, a.k.a. some of Sven Van Caekenberghe's writings.
 
+This is the raw GitHub version of the blog, the published, HTML rendered version is
+[https://blog.stfx.eu](https://blog.stfx.eu).
+
 ## 2025
 
 - [Upgraded/updated Zinc HTTP Components’ server demo](2025-09-01-new-zinc-server-demo.md) (Sept 1, 2025)
