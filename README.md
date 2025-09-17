@@ -14,3 +14,4 @@ This is the raw GitHub version of the blog, the published, HTML rendered version
 - [Common Zinc HTTP resource control settings](2025-09-10-common-zinc-settings.md) (Sept 10, 2025)
 - [Cooperative Pharo server shutdown](2025-09-12-cooperative-server-shutdown.md) (Sept 12, 2025)
 - [Performing the Google Authenticator computation in Elixir](2025-09-15-elixir-google-authenticator.md) (Sept 15, 2025)
+- [Zinc HTTP client settings](2025-09-17-http-client-settings.md) (Sept 17, 2025)

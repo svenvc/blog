@@ -38,7 +38,7 @@ Which produces this output on the Transcript.
 
 You can clearly see that all 4 request/response cycles are bracketed by just one connection established/closed event. This is done because opening a connection has a cost and reusing an existing connection is more efficient. As a side note, this only works when the request all go to the same host and port using the same scheme.
 
-But what if you know up front that you need to make only one request/response ? If you are lazy, you let garbage collection and finalisation clean up for you. The better solution is to use the beOneShot option.
+But what if you know up front that you need to make only one request/response ? If you are lazy, you let garbage collection and finalisation clean up for you. The better solution is to use the `beOneShot` option.
 
 ```smalltalk
 ZnLogEvent logToTranscript.
@@ -58,11 +58,11 @@ Which produces this log output.
 2025-09-17 14:16:26 053 677464 Connection Closed 146.185.177.20:443
 ```
 
-So even though we did not manually close the client, this happened automatically. Furthermore, the server was informed by this as well by way of a `Connect: close` header in the request, so the other side also closed the connection immediately after sending the response. Nice!
+So even though we did not manually close the client, this happened automatically and immediately. Furthermore, the server was informed of this as well by way of a `Connect: close` header in the request, so the other side also closed the connection right after sending the response. Nice!
 
-As a protocol, HTTP might give you an answer, but not the answer that you expect. Say you want to fetch a text file with some numbers from a server. If the server was removed from the server, you will get a Not found response instead of the string with numbers. It would be as if you mistyped the name. Another possible issue is that you request say an image, but get an HTML document back.
+As a protocol, HTTP might give you an answer, but not the answer that you expect. Say you want to fetch a text file with some numbers from a server. If the file was renamed or removed from the server, you will get a Not found response instead of the string with numbers. It would be as if you mistyped the name. Another possible issue is that you request say an image, but get an HTML document back.
 
-The next script show how to make request with a higher reliability.
+The next script shows how to make requests with a higher reliability.
 
 ```smalltalk
 ZnClient new
@@ -71,12 +71,12 @@ ZnClient new
   get: 'https://zn.stfx.eu/zn/numbers.txt'.
 ```
 
-The systemPolicy option does 3 things:
-- it sets the enforceHttpSuccess option to true, meaning non successful responses will trigger an exception
-- it set the enforceAcceptContentType option to true, meaning that any response with a content type incompatible with what we expect will trigger an exception
-- it sets the numberOfRetries to 2, so it tries again after the first failure of any kind, possibly handling transient network errors
+The `systemPolicy` option does 3 things:
+- it sets the `enforceHttpSuccess` option to true, meaning non successful responses will trigger an exception
+- it set the `enforceAcceptContentType` option to true, meaning that any response with a content type incompatible with what we expect will trigger an exception
+- it sets the `numberOfRetries` to 2, so it tries again after the first two failures related to networking, possibly handling transient network errors
 
-With the accept option, we tell the server what we expect, but this option is also used to validate the response when enforceAcceptContentType is set to true.
+With the `accept` option, we tell the server what we expect, but this option is also used to validate the response when `enforceAcceptContentType` is set to true.
  
 Regarding transient network errors, it is instructive to look at the configuration of the client used in the unit tests.
  
@@ -89,9 +89,9 @@ ZnClientTest>>#httpClient
       yourself
  ```
 
-This code adds specific controls of the timeout, the numberOfRetries and the retryDelay, with the goal of overcoming slowdowns due to the client side, the server side or the network - in the hope that these were transient problems.
+This code adds specific controls of the `timeout`, the `numberOfRetries` and the `retryDelay`, with the goal of overcoming slowdowns coming from either the client side, the server side or the network - in the hope that these were transient problems.
 
-Often you use an HTTP client to interact with a JSON REST api. Luckily, the option forJsonREST helps us to set up things. Here is how you use it against a service that echoes your GET request as a JSON structure.
+Often you use an HTTP client to interact with a JSON REST api. The option `forJsonREST` helps us to set up things with one message send. Here is how you use it against a service that echoes your GET request as a JSON structure.
 
 ```smalltalk
 ZnClient new
@@ -103,7 +103,7 @@ ZnClient new
   get.
 ```
 
-This same service can also handle POST requests at a different endpoint. Notice how the conversion to JSON is done automatically as well.
+This same service can also handle POST requests at a different endpoint. Notice how the conversion from Smalltalk to JSON is done automatically as well, as it is done when JSON is received.
 
 ```smalltalk
 ZnClient new
@@ -115,8 +115,8 @@ ZnClient new
   post.
 ```
 
-To conclude, I want to point you to two authentication options that might be useful.
-- ZnClient>>#setBasicAuthenticationUsername:password:
-- ZnClient>>#setBearerAuthentication:
+To conclude, I want to point out two authentication options that might be useful.
+- `ZnClient>>#setBasicAuthenticationUsername:password:`
+- `ZnClient>>#setBearerAuthentication:`
 
 These allow you to tackle the most commonly used authentication systems used by web services.
