@@ -28,11 +28,11 @@ Options are marked by a special `znOption` pragma.
 
 ```smalltalk
 ZnOptions class>>#socketStreamTimeout
-	"The timeout in seconds for network socket stream operations like connecting, reading and writing."
+  "The timeout in seconds for network socket stream operations like connecting, reading and writing."
 
-	<znOption>
+  <znOption>
 
-	^ 30
+  ^ 30
 ```
 
 To access the current applicable value of an option, 
@@ -61,17 +61,17 @@ make changes and run a code block in which the new options will be applicable.
 
 ```smalltalk
 ZnOptions globalDefault clone
-	at: #socketStreamTimeout put: 5;
-	during: [ ZnNetworkingUtils socketStreamTimeout ]
+  at: #socketStreamTimeout put: 5;
+  during: [ ZnNetworkingUtils socketStreamTimeout ]
 ```
 
 Since we have the following implementation:
 
 ```smalltalk
 ZnNetworkingUtils class>>#socketStreamTimeout
-	"Return the timeout in seconds for network socket stream operations like connecting, reading and writing."
+   "Return the timeout in seconds for network socket stream operations like connecting, reading and writing."
 
-	^ ZnCurrentOptions at: #socketStreamTimeout 
+  ^ ZnCurrentOptions at: #socketStreamTimeout 
 ```
 
 The expression will return 5. 
@@ -84,16 +84,16 @@ To use a low timeout on a single HTTP GET, we can do:
 
 ```smalltalk
 ZnOptions globalDefault clone
-	at: #socketStreamTimeout put: 2;
-	during: [ ZnClient new get: 'https://zn.stfx.eu/small' ]
+  at: #socketStreamTimeout put: 2;
+  during: [ ZnClient new get: 'https://zn.stfx.eu/small' ]
 ```
 
 To confirm this works, we can request an artificial server side delay.
 
 ```smalltalk
 ZnOptions globalDefault clone
-	at: #socketStreamTimeout put: 2;
-	during: [ ZnClient new get: 'https://zn.stfx.eu/echo?delay=3' ]
+  at: #socketStreamTimeout put: 2;
+  during: [ ZnClient new get: 'https://zn.stfx.eu/echo?delay=3' ]
 ```
 
 This will result in a `ConnectionTimedOut` exception.
