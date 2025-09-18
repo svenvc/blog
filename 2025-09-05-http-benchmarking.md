@@ -2,15 +2,19 @@
 
 Sept 5, 2025
 
-From an engineering standpoint, we should benchmark our HTTP server setup to evaluate our architectural decisions and the parameters that we are using. To measure is to know and all that.
+From an engineering standpoint, we should benchmark our HTTP server setup to evaluate our architectural decisions 
+and the parameters that we are using. To measure is to know and all that.
 
 Yes, but HTTP Benchmarking (or any benchmarking really) is quite complex and many aspects influence the results that we observe.
 
-The setup at https://zn.stfx.eu offers a nice framework to highlight the serious variability depending on what we are benchmarking and how we do our benchmarking.
+The setup at [https://zn.stfx.eu](https://zn.stfx.eu) offers a nice framework to highlight 
+the serious variability depending on what we are benchmarking and how we do our benchmarking.
 
 Be warned though: you are about to enter a rabbit hole.
 
-We are going to use `ab`, the Apache HTTP server benchmarking tool. You can experiment yourself against the demo server or a local server in your image. Here is the full output of a single run:
+We are going to use `ab`, the Apache HTTP server benchmarking tool. 
+You can experiment yourself against the demo server or a local server in your image. 
+Here is the full output of a single run:
 
 ```console
 $ ab -k -n 1024 -c 16 https://zn.stfx.eu/small 
@@ -73,15 +77,24 @@ Percentage of the requests served within a certain time (ms)
  100%    181 (longest request)
 ```
 
-The **basic invocation** is to do 1024 requests with a concurrency level of 16. This simulates 16 HTTP clients each doing 64 requests. Note that we explicitly ask for HTTP/1.1 keepalive to be turned on. That means that each client should open one connection and use it for all its 64 requests.
+The **basic invocation** is to do 1024 requests with a concurrency level of 16. 
+This simulates 16 HTTP clients each doing 64 requests. 
+Note that we explicitly ask for HTTP/1.1 keepalive to be turned on. 
+That means that each client should open one connection and use it for all its 64 requests.
 
-Before looking at the results it is important to make sure all requests completed successfully and have the content length that we expect. All requests should be keepalive.
+Before looking at the results it is important to make sure all requests completed successfully 
+and have the content length that we expect. All requests should be keepalive.
 
-The key numbers are requests per second and the time per request. Here we get about 480 reqs/s and 32 ms/req. That is a good, acceptable result for a single low end server running a dynamic language across the internet over a secure connection.
+The key numbers are requests per second and the time per request. 
+Here we get about 480 reqs/s and 32 ms/req. 
+That is a good, acceptable result for a single low end server running a dynamic language across the internet over a secure connection.
 
 Let’s see how our numbers change when measuring different things differently.
 
-Reducing **the concurrency level** has a big impact on overall throughput, while the time per request remains the same. The relation between these two numbers is almost linear. On the other hand, a lower concurrency level puts less stress on the server.
+Reducing **the concurrency level** has a big impact on overall throughput, 
+while the time per request remains the same. 
+The relation between these two numbers is almost linear. On the other hand, 
+a lower concurrency level puts less stress on the server.
 
 ```console
 $ ab -k -n 1024 -c 4 https://zn.stfx.eu/small
@@ -97,7 +110,8 @@ Requests per second:    34.72 [#/sec] (mean)
 Time per request:       460.844 [ms] (mean)
 ```
 
-The **size of the document** being transferred impacts time on the wire. A 16 bytes document is faster than a 16Kb document, but not that much.
+The **size of the document** being transferred impacts time on the wire. 
+A 16 bytes document is faster than a 16Kb document, but not that much.
 
 ```console
 $ ab -k -n 1024 -c 16 https://zn.stfx.eu/bytes/16
@@ -111,7 +125,8 @@ Requests per second:    386.36 [#/sec] (mean)
 Time per request:       41.412 [ms] (mean)
 ```
 
-There is also a difference between a **dynamic** and a **static** document. Our original request https://zn.stfx.eu/small runs a bit of Smalltalk code that dynamically builds an HTML document.
+There is also a difference between a **dynamic** and a **static** document. 
+Our original request https://zn.stfx.eu/small runs a bit of Smalltalk code that dynamically builds an HTML document.
 
 ```smalltalk
 small: request
@@ -123,7 +138,8 @@ small: request
 	^ ZnResponse ok: (ZnEntity html: page)
 ```
 
-The Zinc server demo also contains a static file server with a similar document called `small.html` that is read from a file with the same name.
+The Zinc server demo also contains a static file server with a similar document 
+called `small.html` that is read from a file with the same name.
 
 ```console
 $ ab -k -n 1024 -c 16 https://zn.stfx.eu/zn/small.html
@@ -131,7 +147,8 @@ Requests per second:    510.91 [#/sec] (mean)
 Time per request:       31.316 [ms] (mean)
 ```
 
-We can also try to measure the cost of **proxying** by comparing `small.html` being served directly by nginx vs. zinc serving that file as above.
+We can also try to measure the cost of **proxying** by comparing `small.html` 
+being served directly by nginx vs. zinc serving that file as above.
 
 ```console
 $ ab -k -n 1024 -c 16 https://stfx.eu/small.html
@@ -139,42 +156,55 @@ Requests per second:    520.56 [#/sec] (mean)
 Time per request:       30.736 [ms] (mean)
 ```
 
-These last two variations make only a small difference, because the request handling of the back end Zinc server is relatively fast, as we will see later on, but also because our document is, well, small (about 500 bytes).
+These last two variations make only a small difference,
+ because the request handling of the back end Zinc server is relatively fast, 
+ as we will see later on, but also because our document is, well, small (about 500 bytes).
 
 The following URLs can be used for a similar test on a larger document (about 8Kb):
 - https://zn.stfx.eu/dw-bench
 - https://zn.stfx.eu/zn/st-bench.html
 - https://stfx.eu/st-bench.html
 
-Now, let’s change the **network** being used. Up until now, the numbers shown were from my home office machine, over a wireless network, residential cable internet maxing out at 300 Mbps down, 30 Mbps up in Belgium to the server which happens to be located in the Netherlands.
+Now, let’s change the **network** being used. 
+Up until now, the numbers shown were from my home office machine, 
+over a wireless network, residential cable internet maxing out at 300 Mbps down, 
+30 Mbps up in Belgium to the server which happens to be located in the Netherlands.
 
 Here is a measurement from a cheap shared virtual private server (4 cores, 6Gb memory) in Germany.
 
 ```console
-$ ab -k -n 1024 -c 16 https://stfx.eu/small.html
+$ ab -k -n 1024 -c 16 https://zn.stfx.eu/small
 Requests per second:    788.91 [#/sec] (mean)
 Time per request:       20.281 [ms] (mean)
 ```
 
-Switching to a more professional setup with a strong symmetrical internet feed, though running on older hardware and inside a container, the numbers improve again.
+Switching to a more professional setup with a strong symmetrical internet feed, 
+though running on older hardware and inside a container, the numbers improve again.
 
 ```console
-$ ab -k -n 1024 -c 16 https://stfx.eu/small.html
+$ ab -k -n 1024 -c 16 https://zn.stfx.eu/small
 Requests per second:    1163.28 [#/sec] (mean)
 Time per request:       13.754 [ms] (mean)
 ```
 
-Now let’s log in to the server itself and run our benchmark there, first using the external URL that we used before.
+Now let’s log in to the server itself and run our benchmark there, 
+using the external URL that we used before.
 
 ```console
-$ ab -k -n 1024 -c 16 https://stfx.eu/small.html
+$ ab -k -n 1024 -c 16 https://zn.stfx.eu/small
 Requests per second:    1138.93 [#/sec] (mean)
 Time per request:       14.048 [ms] (mean)
 ```
 
-That result seems equivalent to our result from the machine using the better internet feed. The fact that the benchmarking tool with its concurrent clients runs on the same machine as the server probably has an influence too, especially since it is basically a one core machine.
+That result seems equivalent to our result from the machine using the better internet feed. 
+The fact that the benchmarking tool with its concurrent clients runs on the same machine 
+as the server probably has an influence too, especially since it is basically a one core machine.
 
-Now that we are on the machine, we can also access the backend zinc server directly, bypassing the proxying and secure connection, i.e. bypassing nginx.
+In this setup, we cannot use a localhost address against nginx,
+since it serves HTTPS with multiple domain name based virtual servers.
+
+Now that we are on the machine, we can also access the backend zinc server directly, 
+bypassing the proxying and secure connection, i.e. bypassing nginx.
 
 ```console
 $ ab -k -n 1024 -c 16 http://localhost:8180/small
@@ -182,9 +212,11 @@ Requests per second:    3162.00 [#/sec] (mean)
 Time per request:       5.060 [ms] (mean)
 ```
 
-Impressive. But remember that the zinc demo is deployed on pretty basic **hardware** : a VM with 1 virtual CPU core and 1 Gb memory. That is enough for its intended purpose but hardly powerful.
+Impressive. But remember that the zinc demo is deployed on pretty basic **hardware** : 
+a VM with 1 virtual CPU core and 1 Gb memory. That is enough for its intended purpose but hardly powerful.
 
-My development machine has an Apple Silicon M2 Pro chip and 16Gb memory, with 10 cores and a clock speed of up to 3.5 GHz. The local results are quite impressive.
+My development machine has an Apple Silicon M2 Pro chip and 16Gb memory, 
+with 10 cores and a clock speed of up to 3.5 GHz. The local results are quite impressive.
 
 ```console
 $ ab -k -n 1024 -c 16 http://localhost:8180/small
@@ -192,4 +224,6 @@ Requests per second:    7531.07 [#/sec] (mean)
 Time per request:       2.125 [ms] (mean)
 ``` 
 
-If there is one thing to remember from all this, it is that you should be really careful when doing benchmarks and be aware of many variable or dimensions.
+If there is one thing to remember from all this, 
+it is that you should be really careful when doing benchmarks 
+and be aware of many variable or dimensions.

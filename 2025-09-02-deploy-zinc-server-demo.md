@@ -61,7 +61,7 @@ By asking the server to logToTranscript with a certain logLevel we get pretty st
 ```
 
 The default server is used almost completely in its out of the box configuration.
-A specific port is used (8180) and a static file server is installed under the `/zn` prefix.
+A specific port is used, 8180, and a static file server is installed under the `/zn` prefix.
 Some extra welcome text is added as well.
 
 Nowadays, a production HTTP server needs to implement HTTPS and ideally HTTP/2.
@@ -77,7 +77,7 @@ Additionally, it would be possible to do load balancing and fail over across
 multiple Pharo instances, but that is another, interesting story.
 
 The third step is to extend the nginx configuration.
-Here is the file for the zn.stfx.eu demo server:
+Here is the file for the [https://zn.stfx.eu](https://zn.stfx.eu) demo server:
 
 ```nginx
 server {
@@ -129,12 +129,12 @@ proxy_set_header Connection "";
 proxy_http_version 1.1;
 ```
 
-They make sure that connections between the front end nginx and backend zinc server are kept alive,
+This makes sure that connections between the front end nginx and backend zinc server are kept alive,
 which should improve performance.
 State management of these connections is quite complex, depending on traffic,
 but let's assume that nginx is battle tested in this respect.
 
-The result of all this is that a standard tool like curl shows us that all is OK
+The result of all this is that a standard tool like `curl` shows us that all is OK
 with respect to security and HTTP/2, as can be seen from this interaction:
 
 ```console
@@ -189,5 +189,4 @@ $ curl -v https://zn.stfx.eu/small
 <!DOCTYPE html><html><head><title>Small</title><style type="text/css">body { color: black; background: white; width: 900px; font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 16px } p { width: 800px; padding: 0 20px 10px 20px } ul, ol { width: 800px; padding: 0 5px 5px 30px } #logo { color: orange; font-family: Helvetica, sans-serif; font-weight: bold; font-size: 128px; text-decoration: none }</style></head><body><a id="logo" href="/">Zn</a><h1>Small</h1><p>This is a small HTML document</p></body></html>
 ```
 
-From the server and x-server headers in the response, we can confirm our frontend/backend setup.
-
+From the server and x-server headers in the response, we can confirm our frontend/backend setup is working as expected.

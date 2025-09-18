@@ -2,15 +2,29 @@
 
 Sept 12, 2025
 
-One of the nice things about blogging is the interaction with readers. Norbert Hartl recently described an elegant technique to implement cooperative shutdown of a Pharo server using existing Zinc tools. I want to describe his idea here.
+One of the nice things about blogging is the interaction with readers. 
+Norbert Hartl recently described an elegant technique to implement 
+cooperative shutdown of a Pharo server using existing Zinc tools. 
+I want to describe his idea here.
 
-What is the issue? When a Pharo server process is under control of other tools (such as systemd), we obviously have control over our startup sequence, but when we are stopped, the standard flow is a hard kill of the process.
+What is the issue? 
+When a Pharo server process is under control of other tools (such as systemd), 
+we obviously have control over our startup sequence, 
+but when we are stopped, the standard flow is a hard kill of the process.
 
-In many cases, when we are stopped by a hard kill, nothing bad happens. The server processes running inside Pharo just stop immediately and that’s it. 
+In many cases, when we are stopped by a hard kill, nothing bad happens. 
+The server processes running inside Pharo just stop immediately and that’s it. 
 
-But in some cases, like when we implement some form of persistency ourselves, or when we want to give existing client connections some time to finish their in flight requests, or when we want to close the network services we are using, we need to take control of the stop sequence.
+But in some cases, like when we implement some form of persistency ourselves, 
+or when we want to give existing client connections some time to finish their in flight requests, 
+or when we want to close the network services we are using, we need to take control of the stop sequence.
 
-Pharo and its VM do not provide any services to do this, so we’ll have to implement this ourselves. Norbert’s idea consists of 2 parts: using `ZnReadEvalPrintDelegate` to offer a way to activate a shutdown sequence inside the running image and adding a signal handler to our startup script to trap the necessary OS signals and invoke the REPL service to execute the actual code.
+Pharo and its VM do not provide any services to do this, 
+so we’ll have to implement this ourselves. 
+Norbert’s idea consists of 2 parts: 
+using `ZnReadEvalPrintDelegate` to offer a way to activate a shutdown sequence inside the running image 
+and adding a signal handler to our startup script to trap the necessary OS signals 
+and invoke the REPL service to execute the actual code.
 
 In our Smalltalk startup script we add the following.
 
@@ -28,14 +42,20 @@ Smalltalk at: #ShutdownSequence put: [
   Smalltalk snapshot: false andQuit: true ].
 ```
 
-A special REST service, only accessible on the local network on port 42033, with a single endpoint, `/repl`, will accepts POST requests with Smalltalk code, execute them and return the result. For example:
+A special REST service, only accessible on the local network on port 42033, 
+with a single endpoint, `/repl`, will accepts POST requests with Smalltalk code, 
+execute them and return the result. 
+For example:
 
 ```console
 $ curl -X POST -H'Content-Type:text/plain' -d '42 factorial' http://localhost:42033/repl
 1405006117752879898543142606244511569936384000000000
 ```
 
-Now we can extend our startup shell script (Bash) with a hook and install it. We need an alternative to our `pharo-ctl.sh` script, the simpler `pharo-launcher.sh`, that keeps waiting for its Pharo subprocess once it is launched. Here it is in its entirety.
+Now we can extend our startup shell script with a hook and install it. 
+We need an alternative to our `pharo-ctl.sh` script, the simpler `pharo-launcher.sh`, 
+that keeps waiting for its Pharo subprocess once it is launched. 
+Here it is in its entirety.
 
 ```bash
 #!/bin/bash
@@ -173,7 +193,7 @@ Restart=always
 WantedBy=default.target
 ```
 
-We are using a simple type, a mixed kill mode and a stop timeout of 5 seconds.
+We are using a `simple` type, a `mixed` kill mode and a stop timeout of `5` seconds.
 
 Here is the status after a successful start.
 
@@ -228,7 +248,7 @@ Sep 12 16:00:02 audio359 systemd[1]: Stopped zinc-http-server-nxt.service - Zinc
 
 Again you can see the `pharo-launcher.sh` script reporting on the different steps it is taking, and finally ending.
 
-In the Pharo log file we can see what happened from the image’s standpoint.
+In the Pharo log file we can see what happened from the image's standpoint.
 
 ```
 Running startup script run-zn.st
@@ -259,6 +279,11 @@ Starting ShutdownSequence...
 Completed ShutdownSequence successfully
 ```
 
-After 3 `/random` requests, the REPL server, which is on a higher, more verbose log level, receive a POST request invoking the ShutdownSequence code. You can see the forked ShutdownSequence code stopping the server. This then completes the cooperative Pharo server shutdown.
+After 3 `/random` requests, the REPL server, which is on a higher, more verbose log level, 
+receive a POST request invoking the ShutdownSequence code. 
+You can see the forked `ShutdownSequence` code stopping the server. 
+This then completes the cooperative Pharo server shutdown.
 
-If anything would go wrong, after a timeout of 5 seconds, systemd will again send SIGKILL, but to all processes, not just the main one as asked by the mixed option.
+If anything would go wrong, after a timeout of 5 seconds, 
+systemd will again send SIGKILL, but to all processes, 
+not just the main one as asked by the mixed option.

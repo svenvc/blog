@@ -44,6 +44,7 @@ The `pharo-ctl.sh` script is a variant of
 in my (old) [pharo-server-tools](https://github.com/svenvc/pharo-server-tools) project.
 
 Invoked without arguments, the script explains how to use it:
+
 ```console
 $ ./pharo-ctl.sh 
 Executing ./pharo-ctl.sh
@@ -67,6 +68,7 @@ The script being the one I showed yesterday, the image the one we build with our
 
 In practice, you use a tool called `systemctl` to manage your service, once installed.
 Here is the output from the `status` subcommand:
+
 ```console
 $ sudo systemctl status zinc-http-server-nxt
 ● zinc-http-server-nxt.service - Zinc HTTP Components Server NXT

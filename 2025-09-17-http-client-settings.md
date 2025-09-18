@@ -2,7 +2,8 @@
 
 Sept 17, 2025
 
-Making an HTTP client request with `ZnClient` works out of the box, with sensible defaults. It is however useful to know about a number of HTTP client settings.
+Making an HTTP client request with `ZnClient` works out of the box, with sensible defaults. 
+It is however useful to know about a number of HTTP client settings.
 
 Modern HTTP defaults to keep alive its connections. Consider the following example.
 
@@ -36,9 +37,13 @@ Which produces this output on the Transcript.
 2025-09-17 14:05:02 048 677464 Connection Closed 146.185.177.20:443
 ```
 
-You can clearly see that all 4 request/response cycles are bracketed by just one connection established/closed event. This is done because opening a connection has a cost and reusing an existing connection is more efficient. As a side note, this only works when the request all go to the same host and port using the same scheme.
+You can clearly see that all 4 request/response cycles are bracketed by just one connection established/closed event. 
+This is done because opening a connection has a cost and reusing an existing connection is more efficient. 
+As a side note, this only works when the request all go to the same host and port using the same scheme.
 
-But what if you know up front that you need to make only one request/response ? If you are lazy, you let garbage collection and finalisation clean up for you. The better solution is to use the `beOneShot` option.
+But what if you know up front that you need to make only one request/response ? 
+If you are lazy, you let garbage collection and finalisation clean up for you. 
+The better solution is to use the `beOneShot` option.
 
 ```smalltalk
 ZnLogEvent logToTranscript.
@@ -58,9 +63,16 @@ Which produces this log output.
 2025-09-17 14:16:26 053 677464 Connection Closed 146.185.177.20:443
 ```
 
-So even though we did not manually close the client, this happened automatically and immediately. Furthermore, the server was informed of this as well by way of a `Connect: close` header in the request, so the other side also closed the connection right after sending the response. Nice!
+So even though we did not manually close the client, this happened automatically and immediately. 
+Furthermore, the server was informed of this as well by way of a `Connect: close` header in the request, 
+so it also closed the connection right after sending the response. Nice!
 
-As a protocol, HTTP might give you an answer, but not the answer that you expect. Say you want to fetch a text file with some numbers from a server. If the file was renamed or removed from the server, you will get a Not found response instead of the string with numbers. It would be as if you mistyped the name. Another possible issue is that you request say an image, but get an HTML document back.
+As a protocol, HTTP might give you an answer, but not the answer that you expect. 
+Say you want to fetch a text file with some numbers from a server. 
+If the file was renamed or removed from the server, you will get a `Not found` response 
+instead of the string with numbers. 
+It would be as if you mistyped the name. 
+Another possible issue is that you request say an image, but get an HTML document back.
 
 The next script shows how to make requests with a higher reliability.
 
@@ -76,22 +88,27 @@ The `systemPolicy` option does 3 things:
 - it set the `enforceAcceptContentType` option to true, meaning that any response with a content type incompatible with what we expect will trigger an exception
 - it sets the `numberOfRetries` to 2, so it tries again after the first two failures related to networking, possibly handling transient network errors
 
-With the `accept` option, we tell the server what we expect, but this option is also used to validate the response when `enforceAcceptContentType` is set to true.
+With the `accept` option, we tell the server what we expect, 
+but this option is also used to validate the response when `enforceAcceptContentType` is set to true.
  
 Regarding transient network errors, it is instructive to look at the configuration of the client used in the unit tests.
  
 ```smalltalk
 ZnClientTest>>#httpClient
   ^ ZnClient new
-      timeout:  self class timeout;
+      timeout: self class timeout;
       numberOfRetries: self class numberOfRetries;
       retryDelay: self class retryDelay;
       yourself
  ```
 
-This code adds specific controls of the `timeout`, the `numberOfRetries` and the `retryDelay`, with the goal of overcoming slowdowns coming from either the client side, the server side or the network - in the hope that these were transient problems.
+This code sets specific values for the `timeout`, the `numberOfRetries` and the `retryDelay` options, 
+with the goal of overcoming slowdowns coming from either the client side, 
+the server side or the network - in the hope that these were transient problems.
 
-Often you use an HTTP client to interact with a JSON REST api. The option `forJsonREST` helps us to set up things with one message send. Here is how you use it against a service that echoes your GET request as a JSON structure.
+Often you use an HTTP client to interact with a JSON REST api. 
+The option `forJsonREST` helps to set up things with one message send. 
+Here is how you use it against a service that echoes your GET request as a JSON structure.
 
 ```smalltalk
 ZnClient new
@@ -103,7 +120,9 @@ ZnClient new
   get.
 ```
 
-This same service can also handle POST requests at a different endpoint. Notice how the conversion from Smalltalk to JSON is done automatically as well, as it is done when JSON is received.
+This same service can also handle POST requests at a different endpoint. 
+Notice how the conversion from Smalltalk to JSON is done automatically as well, 
+as it is done when JSON is received.
 
 ```smalltalk
 ZnClient new
@@ -115,8 +134,8 @@ ZnClient new
   post.
 ```
 
-To conclude, I want to point out two authentication options that might be useful.
+To conclude, I want to point out two authentication options that you will probably need at some point.
 - `ZnClient>>#setBasicAuthenticationUsername:password:`
 - `ZnClient>>#setBearerAuthentication:`
 
-These allow you to tackle the most commonly used authentication systems used by web services.
+These allow you to tackle the most common authentication schemes used by web services.
