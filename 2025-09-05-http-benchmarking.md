@@ -130,12 +130,12 @@ Our original request https://zn.stfx.eu/small runs a bit of Smalltalk code that 
 
 ```smalltalk
 small: request
-	"Answer a small HTML page"
+  "Answer a small HTML page"
 
-	| page |
-	page := self brandedPage: 'Small' do: [ :html |
-		html tag: #p with: 'This is a small HTML document' ].
-	^ ZnResponse ok: (ZnEntity html: page)
+  | page |
+  page := self brandedPage: 'Small' do: [ :html |
+            html tag: #p with: 'This is a small HTML document' ].
+  ^ ZnResponse ok: (ZnEntity html: page)
 ```
 
 The Zinc server demo also contains a static file server with a similar document 
