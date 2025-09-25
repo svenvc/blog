@@ -149,7 +149,7 @@ If you are unfamiliar with Elixir, it is worth noting the following expression.
 DateTime.utc_now() |> DateTime.to_unix()
 ```
 
-The pipe operator takes the result of the first expression and sends it as first argument to the next expression. 
+The pipe operator, `|>`, takes the result of the first expression and sends it as first argument to the next expression. 
 So basically it is the same as the nesting both expressions.
 
 ```elixir
