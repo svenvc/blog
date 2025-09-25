@@ -194,7 +194,7 @@ Here is a screenshot of a part of a page/chapter in the main course.
 
 It explains how we did render timestamps earlier, not taking into account the user’s timezone and how to fix this. George starts by referring to earlier code that needs changing and why. He uses `iex` sessions to explain his point. Make sure to try these yourself as it is a great tool to understand your code. Then he suggests changes/edits with a clear diff. Often, as is the case here, he makes you try one thing, only to explain why that is not the whole solution, to let you learn by experiencing the development process.
 
-At one point you should properly set up an IDE. Here is the [VSCodium](https://vscodium.com) IDE with the extensions [ElixirLS](https://open-vsx.org/extension/elixir-lsp/elixir-ls), [Phoenix Framework](https://open-vsx.org/vscode/item?itemName=victorbjorklund.phoenix) and [Tailwind CSS Intellisense](https://open-vsx.org/extension/bradlc/vscode-tailwindcss). The details are outside the scope of this article though. The screenshot is showing the final version of the `message_timestamp` code.
+You should also properly set up a customized IDE. Here is the [VSCodium](https://vscodium.com) IDE with the extensions [ElixirLS](https://open-vsx.org/extension/elixir-lsp/elixir-ls), [Phoenix Framework](https://open-vsx.org/vscode/item?itemName=victorbjorklund.phoenix) and [Tailwind CSS Intellisense](https://open-vsx.org/extension/bradlc/vscode-tailwindcss). The details are outside the scope of this article though. The screenshot is showing the final version of the `message_timestamp` code.
 
 ![VSCodium IDE message_timestamp](2025-09-25-vscodium.png)
 
