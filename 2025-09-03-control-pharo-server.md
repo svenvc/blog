@@ -2,8 +2,9 @@
 
 Sept 3, 2025
 
-Continuing from the posts of the last two days, I want to describe 
-how I control the Pharo server process on my Linux machine.
+Continuing from the previous post,
+[Deploying the Zinc server demo](2025-09-02-deploy-zinc-server-demo.md),
+I want to describe how I control the Pharo server process on my Linux machine.
 Most Linux versions use a framework called [systemd](https://systemd.io)
 (see also [systemd's Wikipedia entry](https://en.wikipedia.org/wiki/Systemd)) 
 to setup, manage and control so called daemons or server processes.
