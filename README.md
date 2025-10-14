@@ -16,3 +16,4 @@ This is the raw GitHub version of the blog, the published, HTML rendered version
 - [Performing the Google Authenticator computation in Elixir](2025-09-15-elixir-google-authenticator.md) (Sept 15, 2025)
 - [Zinc HTTP client settings](2025-09-17-http-client-settings.md) (Sept 17, 2025)
 - [My journey learning Elixir Phoenix LiveView](2025-09-25-learning-elixir-phoenix-liveview.md) (Sept 25, 2025)
+- [Explaining Zinc HTTP Components in Glamorous Toolkit](2025-10-14-explaining-zinc-gtoolkit.md) (Oct 14, 2025)
