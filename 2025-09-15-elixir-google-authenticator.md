@@ -178,3 +178,19 @@ We also need to add some padding to always end up with 6 digits.
 iex(3)> 30293 |> Integer.to_string() |> String.pad_leading(6, "0")
 "030293"
 ```
+
+Since writing this article I learned about 
+[NimbleTOTP](https://github.com/dashbitco/nimble_totp) 
+[hexdocs](https://hexdocs.pm/nimble_totp/NimbleTOTP.html), 
+a tiny library that does the same calculation.
+It is super easy to use.
+
+```console
+iex(1)> Mix.install([:nimble_totp])
+:ok
+iex(2)> secret_key = Base.decode32!("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
+<<61, 198, 202, 164, 130, 74, 109, 40, 135, 103, 178, 51, 30, 32, 180, 49, 102,
+  203, 133, 217>>
+iex(3)> NimbleTOTP.verification_code(secret_key, time: 1478167454)
+"488676"
+```
