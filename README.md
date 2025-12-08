@@ -19,3 +19,4 @@ This is the raw GitHub version of the blog, the published, HTML rendered version
 - [Explaining Zinc HTTP Components in Glamorous Toolkit](2025-10-14-explaining-zinc-gtoolkit.md) (Oct 14, 2025)
 - [A starter Phoenix LiveView project adapted to Fluxon UI](2025-10-15-fluxon-ui-first.md) (Oct 15, 2025)
 - [Formatting and parsing HTTP dates by example](2025-11-05-http-date-by-example.md) (Nov 5, 2025)
+- [HTTP without networking or multiprocessing](2025-12-08-http-no-networking-or-multiprocessing.md) (Dec 8, 2025)
