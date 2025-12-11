@@ -22,7 +22,7 @@ This is an example or experiment where we will be deploying
 much like we did in [Deploying the Zinc server demo](2025-09-02-deploy-zinc-server-demo.md).
 
 The end result is that deploying the demo consists of 3 steps:
-- get the specification and its associated files
+- get the specification and its associated files from its [repository](https://github.com/svenvc/pharo-containers)
 - build an image
 - start a container from the image
 
