@@ -29,6 +29,7 @@ The end result is that deploying the demo consists of 3 steps:
 ```console
 $ git clone https://github.com/svenvc/pharo-containers.git
 $ cd pharo-containers
+$ cd pharo-image-clean-2-stage
 $ podman build -t pharo_test .
 $ podman run -d --name pharo_test -p 8080:8080 pharo_test
 ```
@@ -100,14 +101,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl unzip ca-c
 
 WORKDIR /pharo
 
-COPY build.st run.st ./
+COPY build.st remove.st ./
 
 RUN curl get.pharo.org | bash
 
 RUN ./pharo Pharo.image st --save --quit build.st
 
 RUN ./pharo Pharo.image clean --production
-RUN ./pharo Pharo.iamge st --save --quit remove.st
+RUN ./pharo Pharo.image st --save --quit remove.st
 RUN ./pharo Pharo.image eval --save NoPharoFilesOpener install
 
 
@@ -119,6 +120,8 @@ COPY run.st ./
 COPY --from=builder /pharo/pharo ./
 COPY --from=builder /pharo/pharo-vm ./pharo-vm
 COPY --from=builder /pharo/Pharo.image ./
+
+EXPOSE 8080
 
 CMD ./pharo Pharo.image st --no-quit run.st
 ```
@@ -137,6 +140,7 @@ Now we take a couple of steps to reduce the Pharo image size.
 First we run the `clean` command line handler with the `--production` option.
 This does a reasonable job of reducing memory by doing various cleanups.
 See `ImageCleaner cleanUpForProduction` for more details.
+Note that this process is quite slow, it takes several minutes.
 
 Next we run our `remove.st` script for custom removals, thus removing all test cases.
 Tests are not needed in production.
@@ -192,3 +196,20 @@ docker.io/library/ubuntu    latest      97bed23a3497  2 months ago  80.6 MB
 Our 330Mb image is about equal to 80Mb of Ubuntu + 240Mb of our working directory.
 
 If only the Pharo VM were smaller ... maybe one day.
+
+Update: since this post was published, 
+there were some interesting discussion's on Pharo's Discord.
+
+Matthias Fluor jumped right in with a hack to remove duplicate libraries 
+in the `pharo-vm` directory.
+I took his idea and put it in another Dockerfile variant
+called `pharo-image-vm-clean-2-stage` where the script
+`delete-vm-libs.st` deletes all but a minimal set of libraries.
+We even delete libraries that are not needed on a headless server environment.
+
+And it works ! 
+The total OCI image size is just 140Mb, with an 11Mb VM, which is great. 
+This is about 80Mb for Ubuntu + 11Mb for the VM + 50Mb for the image. 
+And it still works fine as an HTTP server.
+This is not the correct solution and the removal of libraries is certainly too aggressive, 
+but it proves that it is possible to dramatically reduce the VM's size.
