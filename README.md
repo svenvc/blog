@@ -21,3 +21,4 @@ This is the raw GitHub version of the blog, the published, HTML rendered version
 - [Formatting and parsing HTTP dates by example](2025-11-05-http-date-by-example.md) (Nov 5, 2025)
 - [HTTP without networking or multiprocessing](2025-12-08-http-no-networking-or-multiprocessing.md) (Dec 8, 2025)
 - [A Pharo OCI container experiment](2025-12-11-pharo-container-experiment.md) (Dec 11, 2025)
+- [Exploring Distributed Elixir](2025-12-29-exploring-distributed-elixer.md) (Dec 29, 2025)
