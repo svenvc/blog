@@ -22,3 +22,4 @@ This is the raw GitHub version of the blog, the published, HTML rendered version
 - [HTTP without networking or multiprocessing](2025-12-08-http-no-networking-or-multiprocessing.md) (Dec 8, 2025)
 - [A Pharo OCI container experiment](2025-12-11-pharo-container-experiment.md) (Dec 11, 2025)
 - [Exploring Distributed Elixir](2025-12-29-exploring-distributed-elixer.md) (Dec 29, 2025)
+- [Zinc HTTP server settings](2025-12-31-http-server-settings.md) (Dec 31, 2025)
