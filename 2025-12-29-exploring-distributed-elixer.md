@@ -1,7 +1,5 @@
 # Exploring Distributed Elixir
 
-Dec 29, 2025
-
 An [Elixir](https://elixir-lang.org) program consist of 
 a large number of lightweight, concurrent processes
 communicating with each other via asynchronous messages.
@@ -186,9 +184,9 @@ iex(zed@pathfinder)5> GenServer.start(KV, nil, name: {:global, :kv1})
 {:ok, #PID<0.332.0>}
 iex(zed@pathfinder)6> GenServer.call({:global, :kv1}, {:set, :foo, 123})
 {:foo, 123}
+Now any node on the cluster can access `kv1`.
 ```
 
-Now any node on the cluster can access `kv1`.
 
 ```console
 iex(foo@pathfinder)8> GenServer.call({:global, :kv1}, {:get, :foo})
@@ -454,11 +452,14 @@ iex(zed@pathfinder)15> Node.list
 `#PID<27407.110.0>` got removed from the list of subscribers and `mini` left the cluster.
 Again, how cool is it that process monitoring works across nodes of a cluster!
 
+The source code for this and other experiments can be found in the [distributed_elixir_exploration](https://github.com/svenvc/distributed_elixir_exploration) repository.
+
 There is much more to learn about Distributed Elixir,
 here are some references to get you started:
 
 - [libcluster](https://hexdocs.pm/libcluster/readme.html) automatic cluster formation & healing
 - [partisan](https://hexdocs.pm/partisan/readme.html) greater scalability & reduced latency for clusters
+- [syn](https://hexdocs.pm/syn/readme.html) an evolution of Erlang's global and pg modules
 - [Horde](https://hexdocs.pm/horde/getting_started.html) distributed supervisor & registry
 - [Broadway](https://hexdocs.pm/broadway/introduction.html) data ingestion & processing pipelines
 - [PubSub](https://hexdocs.pm/phoenix_pubsub/Phoenix.PubSub.html) realtime publisher & subscriber service

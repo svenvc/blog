@@ -1,7 +1,5 @@
 # A Pharo OCI container experiment
 
-Dec 11, 2025
-
 One way to deploy a Pharo server application is through an 
 [OCI container specification](https://opencontainers.org), 
 often called a Dockerfile.

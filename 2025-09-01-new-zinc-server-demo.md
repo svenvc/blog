@@ -1,7 +1,5 @@
 # Upgraded/updated Zinc HTTP Components' server demo
 
-Sept 1, 2025
-
 Since the summer of 2011, with the release of [Pharo Smalltalk](https://www.pharo.org) version 1.3, 
 [Zinc HTTP Components](https://github.com/svenvc/zinc) has been an essential and critical part of the image. 
 It has been in development ever since, evolving along with the rest of Pharo.
@@ -30,4 +28,3 @@ For example the status page is now clearer and easier to read.
 The list of processes now has a stable sorting, 
 a simplified representation of each process 
 and includes the marked active process.
-

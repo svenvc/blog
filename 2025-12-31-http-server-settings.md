@@ -1,7 +1,5 @@
 # Zinc HTTP server settings
 
-Dec 31, 2025
-
 Zinc's HTTP server framework, `ZnServer` and its subclasses, 
 works fine out of the box, with sensible defaults.
 It is however useful to know about a number of specific HTTP server settings,

@@ -1,7 +1,5 @@
 # Controlling a Pharo server process on Linux
 
-Sept 3, 2025
-
 Continuing from the previous post,
 [Deploying the Zinc server demo](2025-09-02-deploy-zinc-server-demo.md),
 I want to describe how I control the Pharo server process on my Linux machine.

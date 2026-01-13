@@ -1,6 +1,4 @@
-# Performing the Google Authenticator computation in Elixir
-
-Sept 15, 2025
+# The Google Authenticator computation in Elixir
 
 Google Authenticator and many compatible alternatives implement 
 time-based one time passwords (TOTP) with a specific set of parameters for two-factor authentication (2FA). 
@@ -194,3 +192,7 @@ iex(2)> secret_key = Base.decode32!("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
 iex(3)> NimbleTOTP.verification_code(secret_key, time: 1478167454)
 "488676"
 ```
+
+Since writing this article I found the following small library 
+that implements the same calculation:
+[NimbleTOTP](https://github.com/dashbitco/nimble_totp/).

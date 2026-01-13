@@ -1,7 +1,5 @@
 # Cooperative Pharo server shutdown
 
-Sept 12, 2025
-
 One of the nice things about blogging is the interaction with readers. 
 Norbert Hartl recently described an elegant technique to implement 
 cooperative shutdown of a Pharo server using existing Zinc tools. 

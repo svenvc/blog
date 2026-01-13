@@ -1,7 +1,5 @@
 # Formatting and parsing HTTP dates by example
 
-Nov 5, 2025
-
 HTTP dates as used in header field values have a bit of a particular syntax. Zinc HTTP Components can format and parse HTTP dates. There is however also a way to handle this format ‘by example’.
 
 In the [HTTP](https://en.wikipedia.org/wiki/HTTP) protocol, [header fields](https://en.wikipedia.org/wiki/List_of_HTTP_header_fields) play an important role in describing requests or responses. Some common headers have as value a timestamp (date time). These are using the [HTTP date format](https://datatracker.ietf.org/doc/html/rfc9110#section-5.6.7).

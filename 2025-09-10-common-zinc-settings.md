@@ -1,7 +1,5 @@
 # Common Zinc HTTP resource control settings
 
-Sept 10, 2025
-
 Parties involved in a network protocol should protect themselves from potential abuse 
 by imposing some limits on the requests/responses they accept. 
 Let’s have a look at some common resource control settings in Zinc HTTP Components. 

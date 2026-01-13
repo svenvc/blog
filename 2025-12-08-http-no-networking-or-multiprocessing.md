@@ -1,7 +1,5 @@
 # HTTP without networking or multiprocessing
 
-Dec 8, 2025
-
 We all know that [HTTP](https://en.wikipedia.org/wiki/HTTP) is a networking protocol
 with request-response interactions between a client and a server.
 Since there can be multiple clients for each server,

@@ -1,7 +1,5 @@
 # Zinc HTTP client settings
 
-Sept 17, 2025
-
 Making an HTTP client request with `ZnClient` works out of the box, with sensible defaults. 
 It is however useful to know about a number of HTTP client settings,
 on top of [Common Zinc HTTP resource control settings](2025-09-10-common-zinc-settings.md).

@@ -1,7 +1,5 @@
 # My journey learning Elixir Phoenix LiveView
 
-Sept 25, 2025
-
 There is a learning curve to get started with the Elixir Phoenix LiveView stack and to appreciate what makes it such a nice environment. I want to share my journey learning Elixir Phoenix LiveView in the beginning of 2025 and the resources that I used. Things may feel overwhelming but there is great material out there.
 
 Elixir is the programming language, Phoenix is the web application and web service framework and LiveView is the part of Phoenix to build interactive real-time web applications. I am assuming you are coming from a web software development background, read great things about this environment and want to dive in.

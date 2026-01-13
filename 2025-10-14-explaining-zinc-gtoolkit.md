@@ -1,7 +1,5 @@
 # Explaining Zinc HTTP Components in Glamorous Toolkit
 
-Oct 14, 2025
-
 [Glamorous Toolkit](https://gtoolkit.com) (GT) is [feenk](https://feenk.com)’s environment for [Moldable Development](https://moldabledevelopment.com) (MD), an effort to make the inside of software systems explainable through contextual micro tools built for each problem.
 
 Just a couple of these micro tools, mostly custom views, combined with what is already there, massively improve the explainability of Zinc HTTP Components (Zinc, Zn).

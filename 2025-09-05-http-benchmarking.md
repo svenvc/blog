@@ -1,7 +1,5 @@
 # The complexity of HTTP Benchmarking
 
-Sept 5, 2025
-
 From an engineering standpoint, we should benchmark our HTTP server setup to evaluate our architectural decisions 
 and the parameters that we are using. To measure is to know and all that.
 

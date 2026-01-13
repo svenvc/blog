@@ -1,7 +1,5 @@
 # A starter Phoenix LiveView project adapted to Fluxon UI
 
-Oct 15, 2025
-
 [Fluxon UI](https://fluxonui.com) is a commercial collection of web UI components for [Phoenix LiveView](https://phoenixframework.org) projects written by [Andriel Nuernberg](https://andrielfn.com). It only came out this year and I recently bought a license. Though there is great documentation I missed an example starter project to help in converting to it. After some experimentation, I created such a project, named `fluxonui_first`.
 
 There are two goals: to give you something that works out of the box and to show you the detailed steps that led to it. The source code is available on GitHub in the [fluxonui_first](https://github.com/svenvc/fluxonui_first) repository.
