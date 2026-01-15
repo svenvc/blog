@@ -23,3 +23,7 @@ This is the raw GitHub version of the blog, the published, HTML rendered version
 - [A Pharo OCI container experiment](2025-12-11-pharo-container-experiment.md) (Dec 11, 2025)
 - [Exploring Distributed Elixir](2025-12-29-exploring-distributed-elixer.md) (Dec 29, 2025)
 - [Zinc HTTP server settings](2025-12-31-http-server-settings.md) (Dec 31, 2025)
+
+## 2026
+
+- [A generic REST interface into Elixir](2026-01-15-gs-web.md) (Jan 15, 2026)

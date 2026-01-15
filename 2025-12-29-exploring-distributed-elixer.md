@@ -167,7 +167,7 @@ defmodule KV do
 
   @impl true
   def handle_call({:set, key, value}, _, state) do
-    {:reply, {key, value}, Map.put(state, key, value)}
+    {:reply, true, Map.put(state, key, value)}
   end
 
   @impl true
@@ -183,10 +183,10 @@ Again, using the different naming scheme is enough to publish our process to the
 iex(zed@pathfinder)5> GenServer.start(KV, nil, name: {:global, :kv1})
 {:ok, #PID<0.332.0>}
 iex(zed@pathfinder)6> GenServer.call({:global, :kv1}, {:set, :foo, 123})
-{:foo, 123}
-Now any node on the cluster can access `kv1`.
+true
 ```
 
+Now any node on the cluster can access `kv1`.
 
 ```console
 iex(foo@pathfinder)8> GenServer.call({:global, :kv1}, {:get, :foo})
@@ -246,7 +246,7 @@ defmodule PS do
         end
       end)
 
-    {:reply, {:subscribed, topic, sender}, new_state}
+    {:reply, true, new_state}
   end
 
   @impl true
@@ -256,7 +256,7 @@ defmodule PS do
         Enum.reject(subscribers, fn x -> x == sender end)
       end)
 
-    {:reply, {:unsubscribed, topic, sender}, new_state}
+    {:reply, true, new_state}
   end
 
   @impl true
@@ -275,7 +275,7 @@ defmodule PS do
       end
     end)
 
-    {:reply, {:sent, topic, message}, state}
+    {:reply, true, state}
   end
 end
 ```
@@ -292,16 +292,18 @@ we subscribe each node to the same `topic1` and broadcast a message from `zed`.
 iex(zed@pathfinder)7> GenServer.start(PS, nil, name: {:global, :ps1})
 {:ok, #PID<0.362.0>}
 iex(zed@pathfinder)8> GenServer.call({:global, :ps1}, {:subscribe, :topic1})
-{:subscribed, :topic1, #PID<0.307.0>}
+true
 ```
 
 The PID that subscribes is the one from IEX itself.
 
 ```console
 iex(foo@pathfinder)9> GenServer.call({:global, :ps1}, {:subscribe, :topic1})
-{:subscribed, :topic1, #PID<0.110.0>}
+true
 iex(foo@pathfinder)10> self
 #PID<0.110.0>
+iex(foo@pathfinder)11> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
+[#PID<0.110.0>]
 ```
 
 With three nodes subscribed, we can check out the list of subscribers.
@@ -309,7 +311,7 @@ Note the node part of each PID.
 
 ```console
 iex(bar@pathfinder)8> GenServer.call({:global, :ps1}, {:subscribe, :topic1})
-{:subscribed, :topic1, #PID<0.110.0>}
+true
 iex(bar@pathfinder)9> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
 [#PID<0.110.0>, #PID<13530.110.0>, #PID<14801.307.0>]
 ```
@@ -319,7 +321,7 @@ i.e. each node uses a different remote identifier.
 Remember that PID's get translated when they transfer from node to node.
 
 ```console
-iex(foo@pathfinder)11> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
+iex(foo@pathfinder)12> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
 [#PID<14487.110.0>, #PID<0.110.0>, #PID<14630.307.0>]
 ```
 
@@ -328,7 +330,7 @@ where we do *not* receive it ourselves since we explicitly exclude the sender.
 
 ```console
 iex(zed@pathfinder)9> GenServer.call({:global, :ps1}, {:broadcast, :topic1, {:msg, :yo}})
-{:sent, :topic1, {:msg, :yo}}
+true
 iex(zed@pathfinder)10> flush
 :ok
 ```
@@ -336,7 +338,7 @@ iex(zed@pathfinder)10> flush
 On the other nodes we *do* receive the message as expected.
 
 ```console
-iex(foo@pathfinder)12> flush
+iex(foo@pathfinder)13> flush
 {:msg, :yo}
 :ok
 
@@ -389,7 +391,7 @@ defmodule PS do
 
     Process.monitor(sender)
 
-    {:reply, {:subscribed, topic, sender}, new_state}
+    {:reply, true, new_state}
   end
 
   @impl true
@@ -399,7 +401,7 @@ defmodule PS do
         Enum.reject(subscribers, fn x -> x == sender end)
       end)
 
-    {:reply, {:unsubscribed, topic, sender}, new_state}
+    {:reply, true, new_state}
   end
 
   @impl true
@@ -418,7 +420,7 @@ defmodule PS do
       end
     end)
 
-    {:reply, {:sent, topic, message}, state}
+    {:reply, true, state}
   end
 
   @impl true
