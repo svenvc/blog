@@ -196,7 +196,7 @@ You should also properly set up a customized IDE. Here is the [VSCodium](https:/
 
 ![VSCodium IDE message_timestamp](2025-09-25-vscodium.png)
 
-A couple of months after writing this article I switched to using [Zed](https://zed.dev) using the [Expert](https://expert-lsp.org) LSP. This combo is cleaner, faster, and feels nicer and more zen. Here is a screenshot showing the same project, file and funtion, but on a smaller screen.
+A couple of months after writing this article I switched to using [Zed](https://zed.dev) using the [Expert](https://expert-lsp.org) LSP. This combo is cleaner, faster, and feels nicer and more zen. Here is a screenshot showing the same project, file and function, but on a smaller screen.
 
 ![Zed IDE message_timestamp](2025-09-25-zed.png)
 
