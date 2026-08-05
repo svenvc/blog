@@ -17,7 +17,7 @@ I found this particular tutorial really nice to do, it takes less than an hour.
 
 Start by learning to use `iex`, Elixir’s interactive shell. It is a friendly way to experiment and learn. It has completion, shows popup documentations, colored output (not preserved in the code blocks of this blog), a help system and a history log, and much more. Working in steps allows you to build up expressions as you go.
 
-```
+```elixir
 % iex  
 Erlang/OTP 27 [erts-15.2.7.2] [source] [64-bit] [smp:10:10] [ds:10:10:10] [async-threads:1] [jit] [dtrace]
 
@@ -43,7 +43,7 @@ Implemented protocols
 
 Here we ask for the current timestamp, which is printed using a special construct. Next, we type `i` to inspect the last result. This tells us lots of interesting things, for example the fields of the underlying raw representation. With `h` you can ask for a function’s documentation.
 
-```
+```elixir
 iex(3)> h DateTime.utc_now
 
 def utc_now(calendar_or_time_unit \\ Calendar.ISO)               
@@ -104,7 +104,7 @@ Nice!
 
 How would a DateTime structure be rendered as JSON ?
 
-```
+```elixir
 iex(4)> DateTime.utc_now |> JSON.encode!
 "\"2025-09-25T12:34:56.522668Z\""
 iex(5)> i
@@ -134,7 +134,7 @@ When starting something new, a cheat sheet can be quite useful. I found the next
 
 Here is another `iex` session where we answer the question: in the most common Lorem Ipsum placeholder string, which words occur more than once ?
 
-```
+```elixir
 iex(1)> lorem_ipsum = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 iex(2)> lorem_ipsum |> String.split([".", " "], trim: true) |> Enum.map(&String.downcase/1)
@@ -196,4 +196,8 @@ You should also properly set up a customized IDE. Here is the [VSCodium](https:/
 
 ![VSCodium IDE message_timestamp](2025-09-25-vscodium.png)
 
-Take your time to enjoy these beautiful courses. Don’t skip steps. Lookup everything you don’t understand or that otherwise interests you. I guarantee you it will be worth it. Afterwards you should be able to start your first real Elixir Phoenix LiveView project.
+A couple of months after writing this article I switched to using [Zed](https://zed.dev) using the [Expert](https://expert-lsp.org) LSP. This combo is cleaner, faster, and feels nicer and more zen. Here is a screenshot showing the same project, file and funtion, but on a smaller screen.
+
+![Zed IDE message_timestamp](2025-09-25-zed.png)
+
+Take your time to enjoy the beautiful courses mentioned above. Don’t skip steps. Look up everything you don’t understand or that otherwise interests you. I guarantee you it will be worth it. Afterwards you should be able to start your first real Elixir Phoenix LiveView project.

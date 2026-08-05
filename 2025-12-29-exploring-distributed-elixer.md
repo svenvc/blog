@@ -22,7 +22,7 @@ and then connecting those nodes.
 Let's begin and start our first node, `foo`, 
 using functions from the [Node](https://hexdocs.pm/elixir/main/Node.html) module.
 
-```console
+```elixir
 $ iex --sname foo --cookie COOKIE-0123456789
 
 iex(foo@pathfinder)1> Node.self
@@ -33,7 +33,7 @@ iex(foo@pathfinder)2> Node.get_cookie
 
 Now we start our second node, `bar` and connect it to the first node.
 
-```console
+```elixir
 $ iex --sname bar --cookie COOKIE-0123456789
 
 iex(bar@pathfinder)1> Node.connect :foo@pathfinder
@@ -44,7 +44,7 @@ iex(bar@pathfinder)2> Node.list
 
 Both nodes now know each other. When either node dies, the connection disappears.
 
-```console
+```elixir
 iex(foo@pathfinder)3> Node.list
 [:bar@pathfinder]
 ```
@@ -67,7 +67,7 @@ This is a process that holds a value that can be queried or updated.
 On our `foo` node, we create an `agent1` and give it a value.
 Note how set the name through the global registry.
 
-```console
+```elixir
 iex(foo@pathfinder)4> Agent.start(fn -> 42 end, name: {:global, :agent1})
 {:ok, #PID<0.117.0>}
 iex(foo@pathfinder)5> :global.registered_names
@@ -77,7 +77,7 @@ iex(foo@pathfinder)5> :global.registered_names
 The `bar` node has automatically sees the same global registry.
 We can now refer to `agent1`, living remotely, and use it as if it were a local one.
 
-```console
+```elixir
 iex(bar@pathfinder)3> :global.registered_names
 [:agent1]
 iex(bar@pathfinder)4> Agent.get({:global, :agent1}, fn x -> x end)
@@ -88,7 +88,7 @@ iex(bar@pathfinder)5> Agent.update({:global, :agent1}, fn x -> x + 1 end)
 
 Any change that we make from `bar` is visible on `foo`, of course.
 
-```console
+```elixir
 iex(foo@pathfinder)6> Agent.get({:global, :agent1}, fn x -> x end)
 43
 ```
@@ -104,7 +104,7 @@ from code that doesn't know it is no longer working locally.
 
 The starting point of this magic lies in the nature of PIDs.
 
-```console
+```elixir
 iex(foo@pathfinder)7> :global.whereis_name :agent1
 #PID<0.117.0>
 
@@ -127,7 +127,7 @@ Here we run another node inside Zed and add it to our existing cluster.
 
 Here is a log of the interaction inside Zed, from the screenshot above.
 
-```console
+```elixir
 $ iex --sname zed --cookie COOKIE-0123456789 -S mix
 
 iex(zed@pathfinder)1> Node.connect :foo@pathfinder
@@ -179,7 +179,7 @@ end
 
 Again, using the different naming scheme is enough to publish our process to the cluster.
 
-```console
+```elixir
 iex(zed@pathfinder)5> GenServer.start(KV, nil, name: {:global, :kv1})
 {:ok, #PID<0.332.0>}
 iex(zed@pathfinder)6> GenServer.call({:global, :kv1}, {:set, :foo, 123})
@@ -188,7 +188,7 @@ true
 
 Now any node on the cluster can access `kv1`.
 
-```console
+```elixir
 iex(foo@pathfinder)8> GenServer.call({:global, :kv1}, {:get, :foo})
 123
 ```
@@ -196,7 +196,7 @@ iex(foo@pathfinder)8> GenServer.call({:global, :kv1}, {:get, :foo})
 Our three nodes are running on the same machine.
 Using another machine is just as easy.
 
-```console
+```elixir
 sven@pathfinder ~ $ ssh enterprise
 Last login: Tue Dec 23 14:46:45 2025 from 192.168.178.103
 sven@enterprise ~ $ iex --sname mini --cookie COOKIE-0123456789
@@ -288,7 +288,7 @@ We exclude the sender, one of the possible semantics.
 Let's see how this works in practice: in our three node cluster, 
 we subscribe each node to the same `topic1` and broadcast a message from `zed`.
 
-```console
+```elixir
 iex(zed@pathfinder)7> GenServer.start(PS, nil, name: {:global, :ps1})
 {:ok, #PID<0.362.0>}
 iex(zed@pathfinder)8> GenServer.call({:global, :ps1}, {:subscribe, :topic1})
@@ -297,7 +297,7 @@ true
 
 The PID that subscribes is the one from IEX itself.
 
-```console
+```elixir
 iex(foo@pathfinder)9> GenServer.call({:global, :ps1}, {:subscribe, :topic1})
 true
 iex(foo@pathfinder)10> self
@@ -309,7 +309,7 @@ iex(foo@pathfinder)11> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
 With three nodes subscribed, we can check out the list of subscribers.
 Note the node part of each PID.
 
-```console
+```elixir
 iex(bar@pathfinder)8> GenServer.call({:global, :ps1}, {:subscribe, :topic1})
 true
 iex(bar@pathfinder)9> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
@@ -320,7 +320,7 @@ The node part of a PID is different on each node,
 i.e. each node uses a different remote identifier.
 Remember that PID's get translated when they transfer from node to node.
 
-```console
+```elixir
 iex(foo@pathfinder)12> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
 [#PID<14487.110.0>, #PID<0.110.0>, #PID<14630.307.0>]
 ```
@@ -328,7 +328,7 @@ iex(foo@pathfinder)12> GenServer.call({:global, :ps1}, {:subscribers, :topic1})
 We can now broadcast a message from `zed`, 
 where we do *not* receive it ourselves since we explicitly exclude the sender.
 
-```console
+```elixir
 iex(zed@pathfinder)9> GenServer.call({:global, :ps1}, {:broadcast, :topic1, {:msg, :yo}})
 true
 iex(zed@pathfinder)10> flush
@@ -337,7 +337,7 @@ iex(zed@pathfinder)10> flush
 
 On the other nodes we *do* receive the message as expected.
 
-```console
+```elixir
 iex(foo@pathfinder)13> flush
 {:msg, :yo}
 :ok
@@ -439,7 +439,7 @@ end
 
 Here is what we see on node `zed` when `mini` subscribes and then disappears.
 
-```console
+```elixir
 iex(zed@pathfinder)12> Node.list
 [:foo@pathfinder, :bar@pathfinder, :mini@enterprise]
 iex(zed@pathfinder)13> GenServer.call({:global, :ps1}, {:subscribers, :topic1})

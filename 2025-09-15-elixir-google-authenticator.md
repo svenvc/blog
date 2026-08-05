@@ -24,7 +24,7 @@ The QR code that you see while using an Authenticator application includes this 
 
 The example key is `HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ`.
 
-```console
+```elixir
 $ iex
 Erlang/OTP 27 [erts-15.2.7.2] [source] [64-bit] [smp:10:10] [ds:10:10:10] [async-threads:1] [jit] [dtrace]
 
@@ -44,7 +44,7 @@ Sometimes this is weird, sometimes this is handy, most of the time, this is no p
 Next, we’ll use a fixed time, to make the calculations repeatable. 
 In the real implementation we need to use the clock time.
 
-```console
+```elixir
 iex(2)> unix_time = 1478167454
 1478167454
 iex(3)> period = 30
@@ -57,7 +57,7 @@ The `moving_factor` is the number that we start with, which will remain the same
 
 Next we convert this number to a 8-byte, 64-bit binary and perform a `HMAC-SHA1` on it using our secret key.
 
-```console
+```elixir
 iex(5)> bytes = <<moving_factor::integer-size(64)>>
 <<0, 0, 0, 0, 2, 239, 213, 184>>
 iex(6)> hmac = :crypto.mac(:hmac, :sha, secret_key, bytes)
@@ -72,7 +72,7 @@ Now we have a 20-byte hash, `hmac`, which will be reduced to a smaller number us
 The very last nibble (half byte) will be used as an offset to make a 4 byte selection from the hash. 
 In this 4 byte selection, the top bit is ignored, so only 31 bits are to be used and converted to an integer.
 
-```console
+```elixir
 iex(7)> <<_::binary-size(19), _::4, offset::4>> = hmac
 <<127, 67, 212, 219, 236, 88, 54, 168, 158, 177, 36, 112, 177, 244, 112, 88, 224, 169, 130, 215>>
 iex(8)> offset
@@ -85,7 +85,7 @@ Here the left hand side should be read as a template that should match the right
 The template consists of a binary with 19 bytes that we are not interested in (hence the underscore), 
 then 4 bits that we are not interested in, and finally the last nibble that we are interested in as `offset`.
 
-```console
+```elixir
 iex(9)> <<_::binary-size(offset), _::1, selection::integer-size(31), _::binary>> = hmac
 <<127, 67, 212, 219, 236, 88, 54, 168, 158, 177, 36, 112, 177, 244, 112, 88, 224, 169, 130, 215>>
 iex(10)> selection
@@ -96,7 +96,7 @@ We do something similar to apply the `offset` to make a sub selection as describ
 Here the template is a binary with offset bytes that we not interested in, a bit we are not interested in, 
 a 31-bit integer that becomes our `selection`, and finally an ignored tail of undetermined length.
 
-```console
+```elixir
 iex(11)> digits = 6
 6
 iex(12)> rem(selection, 10 ** digits)
@@ -159,7 +159,7 @@ supporting the functional programming style of applying functions.
 
 We can use our module as follows.
 
-```console
+```elixir
 $ iex GoogleAuthenticator.exs
 Erlang/OTP 27 [erts-15.2.7.2] [source] [64-bit] [smp:10:10] [ds:10:10:10] [async-threads:1] [jit] [dtrace]
 
@@ -172,18 +172,18 @@ iex(2)> GoogleAuthenticator.generate_code("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
 
 We also need to add some padding to always end up with 6 digits.
 
-```console
+```elixir
 iex(3)> 30293 |> Integer.to_string() |> String.pad_leading(6, "0")
 "030293"
 ```
 
 Since writing this article I learned about 
 [NimbleTOTP](https://github.com/dashbitco/nimble_totp) 
-[hexdocs](https://hexdocs.pm/nimble_totp/NimbleTOTP.html), 
+([hexdocs](https://hexdocs.pm/nimble_totp/NimbleTOTP.html)), 
 a tiny library that does the same calculation.
 It is super easy to use.
 
-```console
+```elixir
 iex(1)> Mix.install([:nimble_totp])
 :ok
 iex(2)> secret_key = Base.decode32!("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
@@ -192,7 +192,3 @@ iex(2)> secret_key = Base.decode32!("HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ")
 iex(3)> NimbleTOTP.verification_code(secret_key, time: 1478167454)
 "488676"
 ```
-
-Since writing this article I found the following small library 
-that implements the same calculation:
-[NimbleTOTP](https://github.com/dashbitco/nimble_totp/).
